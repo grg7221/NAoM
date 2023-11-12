@@ -75,8 +75,19 @@ class UI(QMainWindow):
             self.error.exec_()
 
     def deleterule(self):
-        self.example.delete_rule(-1)
-        self.update_rules()
+        if len(self.alph) != 0:
+            if len(self.example.rules) > 0:
+                self.example.delete_rule(-1)
+                self.update_rules()
+            else:
+                self.error.setText("Ошибка списка правил")
+                self.error.setInformativeText('Список правил пуст!')
+                self.error.exec_()
+        else:
+            self.error.setText("Ошибка алфавита")
+            self.error.setInformativeText('Сначала необходимо задать алфавит (каждый символ через пробел)!')
+            self.error.exec_()
+
 
     def update_rules(self):
         self.Rules.clear()
