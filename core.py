@@ -99,8 +99,13 @@ class UI(QMainWindow):
     def process(self):
         if len(self.alph) != 0:
             try:
-                result = "".join(self.example.processing(self.InputString.text(), show_process = self.ShowProcess.isChecked()))
-                self.OutText.setText(result)
+                if list(set(self.InputString.text()) & set(self.alph)) == list(set(self.InputString.text())):
+                    result = "".join(self.example.processing(self.InputString.text(), show_process = self.ShowProcess.isChecked()))
+                    self.OutText.setText(result)
+                else:
+                    self.error.setText("Ошибка входной строки")
+                    self.error.setInformativeText('Входная строка должна состоять из символов алфавита!')
+                    self.error.exec_()
             except EmptyRulesList:
                 self.error.setText("Ошибка списка правил")
                 self.error.setInformativeText('Сначала необходимо задать правила!')

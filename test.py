@@ -33,5 +33,5 @@ example.show_rules()
 #result = example.processing('aaaa', show_process = True)
 
 # Обработка
-result = example.processing('aaaa', show_process = True)
+result = example.processing('aaaa', show_process = False)
 print(result)
