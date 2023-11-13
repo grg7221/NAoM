@@ -15,8 +15,12 @@ public:
     MarkovAlgorithm(string alph) {
         alphabet = alph;
     }
-    void addRule(const string& symbol, const string& arrow, const string& replacement) 
+    void addRule(const string& symbol, const string& arrow, const string& replacement)
     {
+        if (this->checkarrow(arrow) == false) {
+            cout << "Неверный оператор преобразования!" << endl;
+            return void();
+        }
         if (this->checkString(this->alphabet, symbol) && this->checkString(this->alphabet, replacement)) {
             Rule rule;
             rule.symbol = symbol;
@@ -29,8 +33,11 @@ public:
         }
     }
 
-    string applyRules(const string& input) 
+    string applyRules(const string& input)
     {
+        if (this->rules.empty()) {
+            return "Алгоритм не задан!";
+        }
         if (this->checkString(this->alphabet, input)) {
             string output = input;
             bool haltAfterStar = false;
@@ -56,43 +63,49 @@ public:
             return "";
         }
     }
-    private:
-        vector<Rule> rules; // Правила преобразования
-        string alphabet; // Алфавит
-        bool checkString(const string& alphabet, const string& InputString) {
-            for (int i = 0; i <= InputString.size() - 1; i++) {
-                int is_in_alph = alphabet.find(InputString[i]);
-                if (is_in_alph == -1) {
-                    return false;
-                }
+private:
+    vector<Rule> rules; // Правила преобразования
+    string alphabet; // Алфавит
+    bool checkString(const string& alphabet, const string& InputString) {
+        for (int i = 0; i <= InputString.size() - 1; i++) {
+            int is_in_alph = alphabet.find(InputString[i]);
+            if (is_in_alph == -1) {
+                return false;
             }
-            return true;
         }
+        return true;
+    }
+    bool checkarrow(const string& arrow) {
+        if (arrow != string("->") and arrow != string("->*")) {
+            return false;
+        }
+        return true;
+    }
 };
 
 int main() {
     setlocale(LC_ALL, "");
-    
+
     string alphabet, initialString, symbol, arrow, replacement;
-    
+
     cout << "Введите алфавит: ";
     getline(cin, alphabet);
 
     MarkovAlgorithm algorithm(alphabet);
-    
+
     cout << "Введите начальную строку: ";
     getline(cin, initialString);
 
-    
-    
+
+
     cout << "Введите преобразования (символ, стрелку и замену через пробел, для завершения введите 'x'):\n";
-    while (cin >> symbol && symbol != "x" && cin >> arrow && arrow != "x" && cin.get() && getline(cin, replacement) && !replacement.empty()) 
+    while (cin >> symbol && symbol != "x" && cin >> arrow && arrow != "x" && cin.get() && getline(cin, replacement) && !replacement.empty())
     {
         algorithm.addRule(symbol, arrow, replacement);
     }
-    
+
     string result = algorithm.applyRules(initialString);
     cout << "Результат после применения алгоритма Маркова: " << result << endl;
-    
+
     return 0;
 }
